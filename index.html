@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>75 Day Program</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0F1117; color: #F0EDE6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #1A1D27 0%, #0F1117 100%); border-bottom: 1px solid #2A2D3A; padding: 20px 16px 0; position: sticky; top: 0; z-index: 100; }
+  .header-inner { max-width: 800px; margin: 0 auto; }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .header-icon { background: #E8A838; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .header-title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .header-sub { font-size: 12px; color: #8B8FA8; margin-top: 2px; }
+  .badge { margin-left: auto; background: rgba(232,168,56,0.12); border: 1px solid #B8832A; border-radius: 8px; padding: 4px 10px; font-size: 10px; color: #E8A838; font-weight: 700; }
+  .tabs { display: flex; overflow-x: auto; margin-top: 16px; }
+  .tab { background: none; border: none; padding: 10px 16px; font-size: 13px; font-weight: 600; color: #8B8FA8; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.2s; font-family: inherit; }
+  .tab.active { color: #E8A838; border-bottom-color: #E8A838; }
+  .content { max-width: 800px; margin: 0 auto; padding: 20px 16px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 12px; }
+  .hero-card { background: linear-gradient(135deg, rgba(232,168,56,0.12), transparent); border: 1px solid #B8832A; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+  .hero-label { font-size: 13px; color: #E8A838; font-weight: 700; margin-bottom: 6px; letter-spacing: 1px; }
+  .hero-title { font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+  .hero-sub { margin-top: 10px; font-size: 13px; color: #8B8FA8; line-height: 1.6; }
+  .section-label { font-size: 12px; color: #8B8FA8; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; margin-top: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rule-card { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 12px; padding: 14px 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .rule-icon { font-size: 22px; flex-shrink: 0; }
+  .rule-label { font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .rule-sub { font-size: 11px; color: #8B8FA8; margin-top: 2px; }
+  .dessert-card { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .dessert-label { font-size: 12px; color: #8B8FA8; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+  .dessert-text { font-size: 13px; line-height: 1.6; color: #8B8FA8; }
+  .dessert-text span { color: #E8A838; font-weight: 700; }
+  .water-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .water-bottle { text-align: center; }
+  .water-inner { background: rgba(74,144,217,0.12); border: 1px solid #4A90D9; border-radius: 8px; padding: 10px 4px; margin-bottom: 4px; }
+  .water-emoji { font-size: 18px; }
+  .water-oz { font-size: 10px; color: #4A90D9; font-weight: 700; }
+  .water-time { font-size: 10px; color: #8B8FA8; }
+  .water-total { margin-top: 12px; font-size: 12px; color: #8B8FA8; text-align: center; }
+  .protein-bar-wrap { display: flex; align-items: center; gap: 16px; }
+  .protein-bar-track { flex: 1; background: #2A2D3A; border-radius: 99px; height: 10px; overflow: hidden; }
+  .protein-bar-fill { background: linear-gradient(90deg, #4CAF7D, #E8A838); width: 90%; height: 100%; border-radius: 99px; }
+  .protein-labels { display: flex; justify-content: space-between; margin-top: 6px; }
+  .protein-val { font-size: 24px; font-weight: 800; color: #4CAF7D; }
+  .protein-unit { font-size: 11px; color: #8B8FA8; }
+  .toggle-group { display: flex; gap: 8px; margin-bottom: 20px; }
+  .toggle-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #2A2D3A; background: #1A1D27; color: #8B8FA8; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .toggle-btn.active-gold { border-color: #E8A838; background: rgba(232,168,56,0.12); color: #E8A838; }
+  .toggle-btn.active-green { border-color: #4CAF7D; background: rgba(76,175,125,0.12); color: #4CAF7D; }
+  .schedule-note { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 8px; padding: 8px 14px; margin-bottom: 16px; font-size: 12px; color: #8B8FA8; }
+  .schedule-note span { color: #4CAF7D; font-weight: 700; }
+  .timeline { position: relative; }
+  .timeline-line { position: absolute; left: 52px; top: 0; bottom: 0; width: 2px; background: #2A2D3A; }
+  .timeline-item { display: flex; gap: 16px; margin-bottom: 12px; position: relative; }
+  .timeline-time { width: 52px; text-align: right; padding-top: 10px; font-size: 11px; color: #8B8FA8; font-weight: 600; flex-shrink: 0; }
+  .timeline-dot-wrap { width: 28px; display: flex; align-items: flex-start; padding-top: 8px; justify-content: center; flex-shrink: 0; }
+  .timeline-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #0F1117; margin-top: 2px; }
+  .timeline-card { flex: 1; background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+  .timeline-emoji { font-size: 16px; }
+  .timeline-label { font-size: 13px; font-weight: 600; }
+  .workout-row { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .workout-day { font-size: 13px; color: #8B8FA8; }
+  .workout-type-green { font-size: 13px; font-weight: 700; color: #4CAF7D; }
+  .workout-type-blue { font-size: 13px; font-weight: 700; color: #4A90D9; }
+  .day-tabs { display: flex; gap: 6px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+  .day-tab { padding: 8px 14px; border-radius: 10px; border: 1px solid #2A2D3A; background: #1A1D27; color: #8B8FA8; font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .day-tab.active { border-color: #E8A838; background: rgba(232,168,56,0.12); color: #E8A838; }
+  .day-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+  .meal-item { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 12px; padding: 14px 16px; display: flex; gap: 14px; align-items: center; margin-bottom: 10px; }
+  .meal-slot { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; min-width: 90px; }
+  .meal-food { font-size: 14px; font-weight: 500; }
+  .veg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+  .veg-card { background: rgba(76,175,125,0.12); border: 1px solid rgba(76,175,125,0.13); border-radius: 10px; padding: 10px 12px; }
+  .veg-name { font-size: 13px; font-weight: 700; }
+  .veg-note { font-size: 11px; color: #8B8FA8; margin-top: 2px; }
+  .rule-list-item { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #2A2D3A; font-size: 13px; color: #8B8FA8; align-items: flex-start; }
+  .rule-list-item:last-child { border-bottom: none; }
+  .rule-list-icon { font-size: 14px; flex-shrink: 0; }
+  .stats-row { display: flex; gap: 16px; align-items: center; }
+  .stat-box { text-align: center; }
+  .stat-val { font-size: 20px; font-weight: 800; }
+  .stat-label { font-size: 10px; color: #8B8FA8; }
+  .divider-v { width: 1px; background: #2A2D3A; align-self: stretch; }
+  .stat-note { flex: 1; font-size: 12px; color: #8B8FA8; display: flex; align-items: center; }
+  .exercise-table { width: 100%; border-collapse: collapse; }
+  .exercise-table th { padding: 10px 12px; text-align: left; font-size: 11px; color: #8B8FA8; font-weight: 700; background: #15171F; }
+  .exercise-table th.center { text-align: center; }
+  .exercise-table td { padding: 11px 12px; font-size: 13px; border-top: 1px solid #2A2D3A; }
+  .exercise-table td.center { text-align: center; }
+  .exercise-table tr:nth-child(even) { background: #13151E; }
+  .walk-item { background: #1A1D27; border: 1px solid #2A2D3A; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .walk-item-label { font-size: 13px; color: #8B8FA8; }
+  .walk-item-val { font-size: 13px; font-weight: 600; text-align: right; max-width: 55%; }
+  .cost-hero { background: linear-gradient(135deg, rgba(232,168,56,0.12), transparent); border: 1px solid #B8832A; border-radius: 12px; padding: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .cost-label { font-size: 12px; color: #E8A838; font-weight: 700; letter-spacing: 1px; }
+  .cost-big { font-size: 22px; font-weight: 800; }
+  .cost-sub { font-size: 12px; color: #8B8FA8; }
+  .cost-right { text-align: right; }
+  .cost-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #2A2D3A; }
+  .cost-row:last-child { border-bottom: none; }
+  .cost-item-label { font-size: 13px; color: #8B8FA8; }
+  .cost-item-val { font-size: 13px; font-weight: 700; }
+  .cost-total { display: flex; justify-content: space-between; padding: 12px 0 0; margin-top: 4px; border-top: 2px solid #E8A838; }
+  .cost-total-label { font-size: 14px; font-weight: 700; }
+  .cost-total-val { font-size: 14px; font-weight: 800; color: #E8A838; }
+  .note-item { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #2A2D3A; }
+  .note-item:last-child { border-bottom: none; }
+  .note-arrow { color: #E8A838; font-size: 14px; }
+  .note-text { font-size: 13px; color: #8B8FA8; }
+  .grocery-cat-label { font-size: 12px; color: #8B8FA8; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; margin-top: 16px; }
+  .grocery-item { padding: 12px 16px; border-bottom: 1px solid #2A2D3A; display: flex; justify-content: space-between; align-items: center; }
+  .grocery-item:last-child { border-bottom: none; }
+  .grocery-name { font-size: 14px; font-weight: 600; }
+  .grocery-note { font-size: 12px; color: #8B8FA8; text-align: right; max-width: 45%; }
+  .table-header { padding: 12px 16px; border-bottom: 1px solid #2A2D3A; font-size: 13px; font-weight: 700; color: #4CAF7D; }
+  @media (max-width: 480px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .water-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="header-icon">⚡</div>
+      <div>
+        <div class="header-title">75 Day Program</div>
+        <div class="header-sub">Your complete plan — meals, workouts, schedule</div>
+      </div>
+      <div class="badge">v4.0</div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('overview', this)">Overview</button>
+      <button class="tab" onclick="showTab('schedule', this)">Schedule</button>
+      <button class="tab" onclick="showTab('meals', this)">Meals</button>
+      <button class="tab" onclick="showTab('workouts', this)">Workouts</button>
+      <button class="tab" onclick="showTab('grocery', this)">Grocery</button>
+      <button class="tab" onclick="showTab('tracker', this)">Tracker</button>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="section active">
+    <div class="hero-card">
+      <div class="hero-label">YOUR COMMITMENT</div>
+      <div class="hero-title">75 Days.<br>No exceptions.</div>
+      <div class="hero-sub">Modified for real life — one workout a day, built around family, work, and sustainability. Miss any single task and you restart at Day 1.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:0">THE 6 DAILY RULES</div>
+    <div class="grid-2">
+      <div class="rule-card"><div class="rule-icon">🥗</div><div><div class="rule-label">Follow the meal plan</div><div class="rule-sub">No alcohol. No cheat meals.</div></div></div>
+      <div class="rule-card"><div class="rule-icon">💪</div><div><div class="rule-label">One 45-min workout daily</div><div class="rule-sub">Gym, home circuit, or walk</div></div></div>
+      <div class="rule-card"><div class="rule-icon">💧</div><div><div class="rule-label">One gallon of water</div><div class="rule-sub">128oz — track with your Owalla</div></div></div>
+      <div class="rule-card"><div class="rule-icon">📖</div><div><div class="rule-label">Bible + 15 min nonfiction</div><div class="rule-sub">Daily. Non-negotiable.</div></div></div>
+      <div class="rule-card"><div class="rule-icon">📸</div><div><div class="rule-label">Progress photo</div><div class="rule-sub">Same time, same spot, every day</div></div></div>
+      <div class="rule-card"><div class="rule-icon">🔄</div><div><div class="rule-label">Miss a day — restart</div><div class="rule-sub">Day 1. No exceptions.</div></div></div>
+    </div>
+
+    <div class="section-label">🍰 DESSERT RULE</div>
+    <div class="dessert-card">
+      <div class="dessert-text">Permitted at <span>special family events only</span> — birthdays, holidays, anniversaries. Planned, not spontaneous. One event doesn't derail 75 days. Get right back on plan the next meal.</div>
+    </div>
+
+    <div class="section-label">WATER TRACKING — OWALLA 24OZ</div>
+    <div class="card" style="padding:16px; margin-bottom:20px">
+      <div class="water-grid">
+        <div class="water-bottle"><div class="water-inner"><div class="water-emoji">💧</div><div class="water-oz">24oz</div></div><div class="water-time">6am</div></div>
+        <div class="water-bottle"><div class="water-inner"><div class="water-emoji">💧</div><div class="water-oz">24oz</div></div><div class="water-time">9am</div></div>
+        <div class="water-bottle"><div class="water-inner"><div class="water-emoji">💧</div><div class="water-oz">24oz</div></div><div class="water-time">12pm</div></div>
+        <div class="water-bottle"><div class="water-inner"><div class="water-emoji">💧</div><div class="water-oz">24oz</div></div><div class="water-time">3pm</div></div>
+        <div class="water-bottle"><div class="water-inner"><div class="water-emoji">💧</div><div class="water-oz">24oz</div></div><div class="water-time">6pm</div></div>
+        <div class="water-bottle"><div class="water-inner"><div class="water-emoji">💧</div><div class="water-oz">24oz</div></div><div class="water-time">9pm</div></div>
+      </div>
+      <div class="water-total">6 refills × 24oz = 144oz ✓ (goal: 128oz)</div>
+    </div>
+
+    <div class="section-label">PROTEIN TARGET</div>
+    <div class="card" style="padding:16px">
+      <div class="protein-bar-wrap">
+        <div style="flex:1">
+          <div class="protein-bar-track"><div class="protein-bar-fill"></div></div>
+          <div class="protein-labels"><span style="font-size:11px;color:#8B8FA8">0g</span><span style="font-size:11px;color:#8B8FA8">200g</span></div>
+        </div>
+        <div style="text-align:right">
+          <div class="protein-val">180g</div>
+          <div class="protein-unit">daily target</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div id="schedule" class="section">
+    <div class="toggle-group">
+      <button class="toggle-btn active-gold" onclick="showSchedule('office', this)">🏢 Office</button>
+      <button class="toggle-btn" onclick="showSchedule('remote', this)">🏠 Remote</button>
+      <button class="toggle-btn" onclick="showSchedule('weekend', this)">🌅 Weekend</button>
+    </div>
+
+    <div id="sched-office">
+      <div class="schedule-note">Leave 6:20am · Work 7–4 · Home ~4:45pm · <span>Workout at lunch</span></div>
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-item"><div class="timeline-time">5:15am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#E8A838"></div></div><div class="timeline-card" style="border-left:3px solid #E8A838"><span class="timeline-emoji">⏰</span><span class="timeline-label">Wake up</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">6:00am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🥤</span><span class="timeline-label">Breakfast — Mush Oats or Fairlife shake</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">6:20am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#8B8FA8"></div></div><div class="timeline-card" style="border-left:3px solid #8B8FA8"><span class="timeline-emoji">🚗</span><span class="timeline-label">Out the door</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">12:00pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4CAF7D"></div></div><div class="timeline-card" style="border-left:3px solid #4CAF7D"><span class="timeline-emoji">🏋️</span><span class="timeline-label">Head to work gym</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">12:05pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4CAF7D"></div></div><div class="timeline-card" style="border-left:3px solid #4CAF7D"><span class="timeline-emoji">💪</span><span class="timeline-label">Workout (45 min)</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">12:50pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#8B8FA8"></div></div><div class="timeline-card" style="border-left:3px solid #8B8FA8"><span class="timeline-emoji">🚿</span><span class="timeline-label">Quick shower (10 min)</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">1:00pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍗</span><span class="timeline-label">Eat at desk — rotisserie chicken + sweet potato + sriracha</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">1:15pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#8B8FA8"></div></div><div class="timeline-card" style="border-left:3px solid #8B8FA8"><span class="timeline-emoji">💼</span><span class="timeline-label">Back to work</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">3:30pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍫</span><span class="timeline-label">Snack — Perfect Bar or Oikos Triple Zero</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">4:45pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#8B8FA8"></div></div><div class="timeline-card" style="border-left:3px solid #8B8FA8"><span class="timeline-emoji">🏠</span><span class="timeline-label">Home</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">5:00pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#E07855"></div></div><div class="timeline-card" style="border-left:3px solid #E07855"><span class="timeline-emoji">👨‍👩‍👧</span><span class="timeline-label">Family dinner</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">9:15pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#A07BD9"></div></div><div class="timeline-card" style="border-left:3px solid #A07BD9"><span class="timeline-emoji">📖</span><span class="timeline-label">Oikos + Bible reading + 15 min nonfiction</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">10:00pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#5A5D70"></div></div><div class="timeline-card" style="border-left:3px solid #5A5D70"><span class="timeline-emoji">😴</span><span class="timeline-label">Bed</span></div></div>
+      </div>
+    </div>
+
+    <div id="sched-remote" style="display:none">
+      <div class="schedule-note">Flexible schedule · <span>Workout midday</span></div>
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-item"><div class="timeline-time">7:00am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#E8A838"></div></div><div class="timeline-card" style="border-left:3px solid #E8A838"><span class="timeline-emoji">⏰</span><span class="timeline-label">Wake up</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">7:15am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍳</span><span class="timeline-label">Breakfast — eggs + Mush Oats</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">9:45am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🥤</span><span class="timeline-label">Snack — Oikos or Fairlife</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">11:30am</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4CAF7D"></div></div><div class="timeline-card" style="border-left:3px solid #4CAF7D"><span class="timeline-emoji">💪</span><span class="timeline-label">Workout (45 min — home circuit or walk)</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">12:15pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🥤</span><span class="timeline-label">Fairlife shake post workout</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">12:30pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍗</span><span class="timeline-label">Lunch — full meal at home</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">3:00pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍫</span><span class="timeline-label">Snack — Perfect Bar</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">6:30pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍽️</span><span class="timeline-label">Dinner</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">9:15pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#A07BD9"></div></div><div class="timeline-card" style="border-left:3px solid #A07BD9"><span class="timeline-emoji">📖</span><span class="timeline-label">Oikos + Bible reading + 15 min nonfiction</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">10:00pm</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#5A5D70"></div></div><div class="timeline-card" style="border-left:3px solid #5A5D70"><span class="timeline-emoji">😴</span><span class="timeline-label">Bed</span></div></div>
+      </div>
+    </div>
+
+    <div id="sched-weekend" style="display:none">
+      <div class="schedule-note">Fully flexible · <span>Fit workout whenever it works</span></div>
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-item"><div class="timeline-time">Morning</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍳</span><span class="timeline-label">Breakfast — eggs or Mush Oats</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">Midday</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4CAF7D"></div></div><div class="timeline-card" style="border-left:3px solid #4CAF7D"><span class="timeline-emoji">💪</span><span class="timeline-label">Workout (45 min — home circuit or walk)</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">Post WO</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🥤</span><span class="timeline-label">Fairlife shake</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">Afternoon</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍗</span><span class="timeline-label">Lunch</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">Afternoon</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#4A90D9"></div></div><div class="timeline-card" style="border-left:3px solid #4A90D9"><span class="timeline-emoji">🍫</span><span class="timeline-label">Snack — Perfect Bar or Oikos</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">Evening</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#E07855"></div></div><div class="timeline-card" style="border-left:3px solid #E07855"><span class="timeline-emoji">👨‍👩‍👧</span><span class="timeline-label">Family dinner</span></div></div>
+        <div class="timeline-item"><div class="timeline-time">Night</div><div class="timeline-dot-wrap"><div class="timeline-dot" style="background:#A07BD9"></div></div><div class="timeline-card" style="border-left:3px solid #A07BD9"><span class="timeline-emoji">📖</span><span class="timeline-label">Oikos + Bible reading + 15 min nonfiction</span></div></div>
+      </div>
+    </div>
+
+    <div class="section-label">WEEKLY WORKOUT ROTATION</div>
+    <div class="workout-row"><span class="workout-day">Office Day 1</span><span class="workout-type-green">🏋️ Gym Workout — Lunch</span></div>
+    <div class="workout-row"><span class="workout-day">Office Day 2</span><span class="workout-type-green">🏋️ Gym Workout — Lunch</span></div>
+    <div class="workout-row"><span class="workout-day">Office Day 3</span><span class="workout-type-green">🏋️ Gym Workout — Lunch</span></div>
+    <div class="workout-row"><span class="workout-day">Remote Day 1</span><span class="workout-type-green">🏠 Home Circuit — Midday</span></div>
+    <div class="workout-row"><span class="workout-day">Remote Day 2</span><span class="workout-type-blue">🚶 45-Min Walk — Midday</span></div>
+    <div class="workout-row"><span class="workout-day">Weekend Day 1</span><span class="workout-type-green">🏠 Home Circuit — Flexible</span></div>
+    <div class="workout-row"><span class="workout-day">Weekend Day 2</span><span class="workout-type-blue">🚶 45-Min Walk — Flexible</span></div>
+  </div>
+
+  <!-- MEALS -->
+  <div id="meals" class="section">
+    <div class="day-tabs">
+      <button class="day-tab active" onclick="showMeal(0, this)">Mon</button>
+      <button class="day-tab" onclick="showMeal(1, this)">Tue</button>
+      <button class="day-tab" onclick="showMeal(2, this)">Wed</button>
+      <button class="day-tab" onclick="showMeal(3, this)">Thu</button>
+      <button class="day-tab" onclick="showMeal(4, this)">Fri</button>
+      <button class="day-tab" onclick="showMeal(5, this)">Sat</button>
+      <button class="day-tab" onclick="showMeal(6, this)">Sun</button>
+    </div>
+    <div id="meal-display"></div>
+
+    <div class="section-label">VEGETABLE ROTATION</div>
+    <div class="veg-grid">
+      <div class="veg-card"><div class="veg-name">🌽 Corn</div><div class="veg-note">Canned, just heat</div></div>
+      <div class="veg-card"><div class="veg-name">🥦 Broccoli Cheddar</div><div class="veg-note">Steam bag, 4 min</div></div>
+      <div class="veg-card"><div class="veg-name">🥒 Zucchini</div><div class="veg-note">Sliced, air fryer 10 min</div></div>
+      <div class="veg-card"><div class="veg-name">🌿 Creamy Spinach</div><div class="veg-note">Frozen bag, 4 min</div></div>
+    </div>
+
+    <div class="section-label">DIET RULES</div>
+    <div class="card" style="padding:12px 16px">
+      <div class="rule-list-item"><span class="rule-list-icon">✅</span><span>Sriracha, soy sauce, hot sauce, salsa, lemon/lime — all good</span></div>
+      <div class="rule-list-item"><span class="rule-list-icon">✅</span><span>Seasoning, garlic powder, onion powder — go for it</span></div>
+      <div class="rule-list-item"><span class="rule-list-icon">✅</span><span>1 zero sugar energy drink per day — Celsius recommended</span></div>
+      <div class="rule-list-item"><span class="rule-list-icon">⚠️</span><span>BBQ sauce — small drizzle only, high sugar</span></div>
+      <div class="rule-list-item"><span class="rule-list-icon">🍰</span><span>Dessert at special family events only — planned, not spontaneous</span></div>
+      <div class="rule-list-item"><span class="rule-list-icon">❌</span><span>Alcohol — none</span></div>
+      <div class="rule-list-item" style="border-bottom:none"><span class="rule-list-icon">❌</span><span>Fast food, fried food, candy, soda</span></div>
+    </div>
+  </div>
+
+  <!-- WORKOUTS -->
+  <div id="workouts" class="section">
+    <div class="toggle-group">
+      <button class="toggle-btn active-green" onclick="showWorkout('gym', this)">🏋️ Gym</button>
+      <button class="toggle-btn" onclick="showWorkout('home', this)">🏠 Home</button>
+      <button class="toggle-btn" onclick="showWorkout('walk', this)">🚶 Walk</button>
+    </div>
+
+    <div id="wo-gym">
+      <div class="card" style="padding:12px 16px; margin-bottom:16px">
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-val" style="color:#4CAF7D">3</div><div class="stat-label">Rounds</div></div>
+          <div class="divider-v"></div>
+          <div class="stat-box"><div class="stat-val" style="color:#E8A838">45</div><div class="stat-label">Minutes</div></div>
+          <div class="divider-v"></div>
+          <div class="stat-note">Minimal rest between exercises. 45–60 sec between rounds.</div>
+        </div>
+      </div>
+      <div class="card" style="overflow:hidden; margin-bottom:16px">
+        <div class="table-header">🏋️ Gym Workout — Office Days (Lunch)</div>
+        <div style="overflow-x:auto">
+          <table class="exercise-table">
+            <thead><tr><th>EXERCISE</th><th class="center">SETS</th><th class="center">REPS</th><th>NOTES</th></tr></thead>
+            <tbody>
+              <tr><td style="color:#8B8FA8">Treadmill warm-up</td><td class="center" style="color:#8B8FA8">—</td><td class="center">5 min</td><td style="color:#8B8FA8;font-size:12px">Light walk or jog</td></tr>
+              <tr><td style="font-weight:600">Chest press machine</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Lat pulldown machine</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Leg press machine</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">15</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Dumbbell shoulder press</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Cable row machine</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Dumbbell curl</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Tricep pushdown machine</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="font-weight:600">Leg extension machine</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">15</td><td style="color:#8B8FA8;font-size:12px"></td></tr>
+              <tr><td style="color:#8B8FA8">Treadmill cool-down</td><td class="center" style="color:#8B8FA8">—</td><td class="center">5 min</td><td style="color:#8B8FA8;font-size:12px">Easy walk</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div class="section-label" style="margin-top:0">WEIGHT GUIDE</div>
+        <div class="rule-list-item"><span class="rule-list-icon">✅</span><span>Reps 1-8 feel manageable</span></div>
+        <div class="rule-list-item"><span class="rule-list-icon">💪</span><span>Reps 9-11 feel like work</span></div>
+        <div class="rule-list-item"><span class="rule-list-icon">🔥</span><span>Rep 12 is hard but doable</span></div>
+        <div class="rule-list-item"><span class="rule-list-icon">❌</span><span>Can't easily do a 13th rep</span></div>
+        <div class="rule-list-item" style="border-bottom:none"><span class="rule-list-icon">⚠️</span><span>Form breaks down = weight is too heavy</span></div>
+      </div>
+    </div>
+
+    <div id="wo-home" style="display:none">
+      <div class="card" style="padding:12px 16px; margin-bottom:16px">
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-val" style="color:#4CAF7D">3</div><div class="stat-label">Rounds</div></div>
+          <div class="divider-v"></div>
+          <div class="stat-box"><div class="stat-val" style="color:#E8A838">45</div><div class="stat-label">Minutes</div></div>
+          <div class="divider-v"></div>
+          <div class="stat-note">Minimal rest between exercises. 45–60 sec between rounds.</div>
+        </div>
+      </div>
+      <div class="card" style="overflow:hidden; margin-bottom:16px">
+        <div class="table-header">🏠 Home Circuit — Remote &amp; Weekend</div>
+        <div style="overflow-x:auto">
+          <table class="exercise-table">
+            <thead><tr><th>EXERCISE</th><th class="center">SETS</th><th class="center">REPS</th><th>NOTES</th></tr></thead>
+            <tbody>
+              <tr><td style="color:#8B8FA8">Jumping jacks</td><td class="center" style="color:#8B8FA8">—</td><td class="center">30</td><td style="color:#8B8FA8;font-size:12px">Warm-up</td></tr>
+              <tr><td style="color:#8B8FA8">Bodyweight squats</td><td class="center" style="color:#8B8FA8">—</td><td class="center">20</td><td style="color:#8B8FA8;font-size:12px">Warm-up</td></tr>
+              <tr><td style="color:#8B8FA8">Arm circles</td><td class="center" style="color:#8B8FA8">—</td><td class="center">10 each</td><td style="color:#8B8FA8;font-size:12px">Warm-up</td></tr>
+              <tr><td style="font-weight:600">Dumbbell squat</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">15</td><td style="color:#8B8FA8;font-size:12px">25 lbs</td></tr>
+              <tr><td style="font-weight:600">Pushups</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px">Bodyweight</td></tr>
+              <tr><td style="font-weight:600">Dumbbell Romanian deadlift</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px">25 lbs</td></tr>
+              <tr><td style="font-weight:600">Band chest press</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">15</td><td style="color:#8B8FA8;font-size:12px">Tube bands</td></tr>
+              <tr><td style="font-weight:600">Dumbbell reverse lunge</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">10 each leg</td><td style="color:#8B8FA8;font-size:12px">25 lbs</td></tr>
+              <tr><td style="font-weight:600">Band row</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">15</td><td style="color:#8B8FA8;font-size:12px">Tube bands</td></tr>
+              <tr><td style="font-weight:600">Dumbbell curl</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">12</td><td style="color:#8B8FA8;font-size:12px">25 lbs</td></tr>
+              <tr><td style="font-weight:600">Tricep band pushdown</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">15</td><td style="color:#8B8FA8;font-size:12px">Tube bands</td></tr>
+              <tr><td style="font-weight:600">Plank</td><td class="center" style="font-weight:700;color:#E8A838">3</td><td class="center">30 sec</td><td style="color:#8B8FA8;font-size:12px">Core</td></tr>
+              <tr><td style="color:#8B8FA8">Stretching cool-down</td><td class="center" style="color:#8B8FA8">—</td><td class="center">5 min</td><td style="color:#8B8FA8;font-size:12px">Hamstrings, quads, shoulders</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div class="section-label" style="margin-top:0">WEIGHT GUIDE</div>
+        <div class="rule-list-item"><span class="rule-list-icon">✅</span><span>Reps 1-8 feel manageable</span></div>
+        <div class="rule-list-item"><span class="rule-list-icon">💪</span><span>Reps 9-11 feel like work</span></div>
+        <div class="rule-list-item"><span class="rule-list-icon">🔥</span><span>Rep 12 is hard but doable</span></div>
+        <div class="rule-list-item"><span class="rule-list-icon">❌</span><span>Can't easily do a 13th rep</span></div>
+        <div class="rule-list-item" style="border-bottom:none"><span class="rule-list-icon">⚠️</span><span>Form breaks down = weight is too heavy</span></div>
+      </div>
+    </div>
+
+    <div id="wo-walk" style="display:none">
+      <div class="card" style="padding:20px; margin-bottom:16px">
+        <div style="font-size:18px;font-weight:800;margin-bottom:8px">45-Minute Walk</div>
+        <div style="font-size:13px;color:#8B8FA8;line-height:1.6">Active recovery day. Counts as your full workout. Gets you moving, lets your muscles recover from circuit days.</div>
+      </div>
+      <div class="walk-item"><span class="walk-item-label">Duration</span><span class="walk-item-val">45 minutes minimum</span></div>
+      <div class="walk-item"><span class="walk-item-label">Location</span><span class="walk-item-val">Outdoors preferred, treadmill on rainy days</span></div>
+      <div class="walk-item"><span class="walk-item-label">Pace</span><span class="walk-item-val">Brisk — can talk but not sing</span></div>
+      <div class="walk-item"><span class="walk-item-label">When</span><span class="walk-item-val">Midday remote days, flexible weekends</span></div>
+      <div class="walk-item"><span class="walk-item-label">Frequency</span><span class="walk-item-val">2-3 days per week in rotation</span></div>
+    </div>
+  </div>
+
+  <!-- GROCERY -->
+  <div id="grocery" class="section">
+    <div class="cost-hero">
+      <div>
+        <div class="cost-label">SAM'S CLUB</div>
+        <div class="cost-big">~$8–10/day</div>
+        <div class="cost-sub">All meals covered</div>
+      </div>
+      <div class="cost-right">
+        <div style="font-size:13px;color:#8B8FA8">First trip</div>
+        <div style="font-size:18px;font-weight:700">~$200</div>
+        <div style="font-size:13px;color:#8B8FA8;margin-top:4px">Weekly after</div>
+        <div style="font-size:18px;font-weight:700">~$40</div>
+      </div>
+    </div>
+
+    <div class="grocery-cat-label">🥩 PROTEIN</div>
+    <div class="card"><div class="grocery-item"><span class="grocery-name">Rotisserie chicken</span><span class="grocery-note">Grab 2 at a time</span></div><div class="grocery-item"><span class="grocery-name">Ground beef bulk pack</span><span class="grocery-note">Portion and freeze</span></div><div class="grocery-item"><span class="grocery-name">Salmon frozen bag</span><span class="grocery-note">Large bag, keep frozen</span></div><div class="grocery-item"><span class="grocery-name">Fairlife protein shakes</span><span class="grocery-note">Case of 18 — best price at Sam's</span></div><div class="grocery-item"><span class="grocery-name">Canned tuna</span><span class="grocery-note">Bulk pack</span></div><div class="grocery-item"><span class="grocery-name">Eggs</span><span class="grocery-note">2 dozen minimum</span></div></div>
+
+    <div class="grocery-cat-label">🥣 BREAKFAST &amp; SNACKS</div>
+    <div class="card"><div class="grocery-item"><span class="grocery-name">Mush Oats</span><span class="grocery-note">Refrigerated section</span></div><div class="grocery-item"><span class="grocery-name">Oikos Triple Zero</span><span class="grocery-note">Large multipack</span></div><div class="grocery-item"><span class="grocery-name">Perfect Bars</span><span class="grocery-note">Variety pack</span></div><div class="grocery-item"><span class="grocery-name">Bananas</span><span class="grocery-note">Bunch</span></div><div class="grocery-item"><span class="grocery-name">Peanut butter</span><span class="grocery-note">Large jar</span></div></div>
+
+    <div class="grocery-cat-label">🍚 CARBS</div>
+    <div class="card"><div class="grocery-item"><span class="grocery-name">White rice</span><span class="grocery-note">Large bag — lasts the whole 75 days</span></div><div class="grocery-item"><span class="grocery-name">Sweet potatoes</span><span class="grocery-note">Big bag in produce</span></div><div class="grocery-item"><span class="grocery-name">Crackers</span><span class="grocery-note">Whole grain variety</span></div></div>
+
+    <div class="grocery-cat-label">🥦 VEGETABLES</div>
+    <div class="card"><div class="grocery-item"><span class="grocery-name">Frozen corn steam bags</span><span class="grocery-note">Bulk pack</span></div><div class="grocery-item"><span class="grocery-name">Frozen broccoli cheddar blend</span><span class="grocery-note">Birds Eye or Green Giant</span></div><div class="grocery-item"><span class="grocery-name">Frozen creamy spinach</span><span class="grocery-note">Bulk bag</span></div><div class="grocery-item"><span class="grocery-name">Zucchini (fresh)</span><span class="grocery-note">Buy 4-5, restock mid-week</span></div></div>
+
+    <div class="grocery-cat-label">⚡ DRINKS</div>
+    <div class="card"><div class="grocery-item"><span class="grocery-name">Celsius or zero sugar energy drink</span><span class="grocery-note">1 per day max, pre-workout</span></div></div>
+
+    <div class="grocery-cat-label">🫙 PANTRY</div>
+    <div class="card"><div class="grocery-item"><span class="grocery-name">Sriracha</span><span class="grocery-note">Large bottle</span></div><div class="grocery-item"><span class="grocery-name">Fruit</span><span class="grocery-note">Whatever you prefer</span></div></div>
+
+    <div class="section-label">📊 FIRST TRIP COST BREAKDOWN</div>
+    <div class="card" style="padding:16px">
+      <div class="cost-row"><span class="cost-item-label">Ground beef</span><span class="cost-item-val">$27</span></div>
+      <div class="cost-row"><span class="cost-item-label">Salmon bag</span><span class="cost-item-val">$22</span></div>
+      <div class="cost-row"><span class="cost-item-label">Fairlife case</span><span class="cost-item-val">$30</span></div>
+      <div class="cost-row"><span class="cost-item-label">Perfect Bars</span><span class="cost-item-val">$23</span></div>
+      <div class="cost-row"><span class="cost-item-label">Rice (large)</span><span class="cost-item-val">$9</span></div>
+      <div class="cost-row"><span class="cost-item-label">Sweet potatoes</span><span class="cost-item-val">$9</span></div>
+      <div class="cost-row"><span class="cost-item-label">Peanut butter</span><span class="cost-item-val">$9</span></div>
+      <div class="cost-row"><span class="cost-item-label">Frozen veg x3</span><span class="cost-item-val">$26</span></div>
+      <div class="cost-row"><span class="cost-item-label">Canned tuna</span><span class="cost-item-val">$13</span></div>
+      <div class="cost-row"><span class="cost-item-label">Oikos multipack</span><span class="cost-item-val">$11</span></div>
+      <div class="cost-row"><span class="cost-item-label">Eggs 2dz</span><span class="cost-item-val">$8</span></div>
+      <div class="cost-row"><span class="cost-item-label">Sriracha</span><span class="cost-item-val">$6</span></div>
+      <div class="cost-row" style="border-bottom:none"><span class="cost-item-label">Crackers</span><span class="cost-item-val">$8</span></div>
+      <div class="cost-total"><span class="cost-total-label">Estimated Total</span><span class="cost-total-val">~$183–223</span></div>
+    </div>
+
+    <div class="section-label">📝 SHOPPING NOTES</div>
+    <div class="card" style="padding:16px">
+      <div class="note-item"><span class="note-arrow">→</span><span class="note-text">Ground beef and salmon freeze perfectly — buy bulk and portion out</span></div>
+      <div class="note-item"><span class="note-arrow">→</span><span class="note-text">Zucchini is fresh — only lasts a few days, restock mid-week</span></div>
+      <div class="note-item"><span class="note-arrow">→</span><span class="note-text">Rice, sriracha, and peanut butter last the entire 75 days once stocked</span></div>
+      <div class="note-item"><span class="note-arrow">→</span><span class="note-text">Rotisserie chickens are a weekly buy — grab 2 at a time</span></div>
+      <div class="note-item" style="border-bottom:none"><span class="note-arrow">→</span><span class="note-text">Mush Oats are refrigerated — check that section</span></div>
+    </div>
+  </div>
+
+</div>
+
+
+  <!-- TRACKER -->
+  <div id="tracker" class="section">
+    <div id="tracker-hero" class="hero-card" style="margin-bottom:16px"></div>
+
+    <div class="section-label" style="margin-top:0">TODAY'S CHECKLIST</div>
+    <div id="today-checklist" style="margin-bottom:24px"></div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="section-label" style="margin:0">75 DAY GRID</div>
+      <button onclick="resetTracker()" style="background:none;border:1px solid #E05555;border-radius:8px;padding:5px 10px;color:#E05555;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">RESET</button>
+    </div>
+    <div id="day-grid" style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-bottom:24px"></div>
+
+    <div class="section-label">STREAK & STATS</div>
+    <div id="stats-display"></div>
+  </div>
+
+</div>
+<script>
+// ── MEAL DATA ──────────────────────────────────────────────
+const mealData = [
+  { day: "Monday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "4 scrambled eggs + Mush Oats" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Rotisserie chicken + sweet potato + sriracha" },
+    { slot: "Snack", color: "#A07BD9", food: "Perfect Bar" },
+    { slot: "Dinner", color: "#E07855", food: "Ground beef + rice + sriracha + corn" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]},
+  { day: "Tuesday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "Fairlife shake + Mush Oats" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Canned tuna + crackers + fruit" },
+    { slot: "Snack", color: "#A07BD9", food: "Oikos Triple Zero" },
+    { slot: "Dinner", color: "#E07855", food: "Rotisserie chicken + sweet potato + broccoli cheddar blend" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]},
+  { day: "Wednesday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "4 scrambled eggs + Mush Oats" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Leftover ground beef + rice + sriracha" },
+    { slot: "Snack", color: "#A07BD9", food: "Fairlife shake" },
+    { slot: "Dinner", color: "#E07855", food: "Salmon + rice + zucchini" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]},
+  { day: "Thursday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "4 scrambled eggs + Mush Oats" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Rotisserie chicken + sweet potato + sriracha" },
+    { slot: "Snack", color: "#A07BD9", food: "Perfect Bar" },
+    { slot: "Dinner", color: "#E07855", food: "Ground beef + sweet potato + creamy spinach" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]},
+  { day: "Friday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "Fairlife shake + Mush Oats" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Canned tuna + crackers + fruit" },
+    { slot: "Snack", color: "#A07BD9", food: "Oikos Triple Zero" },
+    { slot: "Dinner", color: "#E07855", food: "Rotisserie chicken + rice + corn" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]},
+  { day: "Saturday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "Mush Oats + banana + peanut butter" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Ground beef + rice + sriracha" },
+    { slot: "Snack", color: "#A07BD9", food: "Fairlife shake" },
+    { slot: "Dinner", color: "#E07855", food: "Salmon + sweet potato + broccoli cheddar blend" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]},
+  { day: "Sunday", meals: [
+    { slot: "Breakfast", color: "#4A90D9", food: "Fairlife shake + Mush Oats + banana" },
+    { slot: "Post Workout", color: "#4CAF7D", food: "Fairlife protein shake" },
+    { slot: "Lunch", color: "#E8A838", food: "Rotisserie chicken + sweet potato + sriracha" },
+    { slot: "Snack", color: "#A07BD9", food: "Perfect Bar" },
+    { slot: "Dinner", color: "#E07855", food: "Ground beef + rice + zucchini" },
+    { slot: "Before Bed", color: "#5A7A8A", food: "Oikos Triple Zero" }
+  ]}
+];
+
+// ── TRACKER STORAGE ────────────────────────────────────────
+const TASKS = [
+  { id: "meal", icon: "🥗", label: "Followed meal plan" },
+  { id: "workout", icon: "💪", label: "Completed 45-min workout" },
+  { id: "water", icon: "💧", label: "Drank 1 gallon of water" },
+  { id: "bible", icon: "📖", label: "Bible reading + 15 min nonfiction" },
+  { id: "photo", icon: "📸", label: "Took progress photo" },
+  { id: "noalcohol", icon: "🚫", label: "No alcohol / no cheat meal" }
+];
+
+function getStorage() {
+  try { return JSON.parse(localStorage.getItem('75day') || '{}'); } catch(e) { return {}; }
+}
+function saveStorage(data) {
+  try { localStorage.setItem('75day', JSON.stringify(data)); } catch(e) {}
+}
+
+function getTodayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+}
+
+function getStartDay() {
+  const data = getStorage();
+  return data.startDate || null;
+}
+
+function setStartDay() {
+  const data = getStorage();
+  if (!data.startDate) {
+    data.startDate = getTodayKey();
+    saveStorage(data);
+  }
+}
+
+function getDayNumber() {
+  const start = getStartDay();
+  if (!start) return 1;
+  const startDate = new Date(start);
+  const today = new Date();
+  startDate.setHours(0,0,0,0);
+  today.setHours(0,0,0,0);
+  const diff = Math.floor((today - startDate) / (1000*60*60*24));
+  return Math.min(diff + 1, 75);
+}
+
+function getTodayTasks() {
+  const data = getStorage();
+  const key = getTodayKey();
+  return data[key] || {};
+}
+
+function toggleTask(taskId) {
+  const data = getStorage();
+  const key = getTodayKey();
+  if (!data[key]) data[key] = {};
+  data[key][taskId] = !data[key][taskId];
+  // If all 6 tasks done, mark day complete
+  const allDone = TASKS.every(t => data[key][t.id]);
+  data[key]._complete = allDone;
+  saveStorage(data);
+  renderTracker();
+}
+
+function isDayComplete(dayNum) {
+  const data = getStorage();
+  const start = getStartDay();
+  if (!start) return false;
+  const startDate = new Date(start);
+  startDate.setHours(0,0,0,0);
+  const d = new Date(startDate);
+  d.setDate(d.getDate() + dayNum - 1);
+  const key = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+  return !!(data[key] && data[key]._complete);
+}
+
+function getCurrentStreak() {
+  const data = getStorage();
+  const start = getStartDay();
+  if (!start) return 0;
+  let streak = 0;
+  const dayNum = getDayNumber();
+  for (let i = dayNum; i >= 1; i--) {
+    if (isDayComplete(i)) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function getTotalComplete() {
+  let count = 0;
+  const dayNum = getDayNumber();
+  for (let i = 1; i <= dayNum; i++) {
+    if (isDayComplete(i)) count++;
+  }
+  return count;
+}
+
+function resetTracker() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    localStorage.removeItem('75day');
+    renderTracker();
+  }
+}
+
+function renderTracker() {
+  setStartDay();
+  const dayNum = getDayNumber();
+  const todayTasks = getTodayTasks();
+  const allDoneToday = TASKS.every(t => todayTasks[t.id]);
+  const streak = getCurrentStreak();
+  const total = getTotalComplete();
+
+  // Hero
+  document.getElementById('tracker-hero').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="font-size:13px;color:#E8A838;font-weight:700;letter-spacing:1px;margin-bottom:4px">CURRENT PROGRESS</div>
+        <div style="font-size:36px;font-weight:800;letter-spacing:-1px">Day ${dayNum}<span style="font-size:16px;color:#8B8FA8;font-weight:400"> / 75</span></div>
+        <div style="margin-top:8px;background:#2A2D3A;border-radius:99px;height:8px;overflow:hidden;width:200px">
+          <div style="background:linear-gradient(90deg,#4CAF7D,#E8A838);width:${(dayNum/75)*100}%;height:100%;border-radius:99px;transition:width 0.5s"></div>
+        </div>
+      </div>
+      <div style="text-align:center;background:rgba(76,175,125,0.12);border:1px solid #4CAF7D;border-radius:12px;padding:12px 16px">
+        <div style="font-size:28px;font-weight:800;color:#4CAF7D">${streak}</div>
+        <div style="font-size:10px;color:#8B8FA8;font-weight:700">DAY STREAK</div>
+      </div>
+    </div>
+    ${allDoneToday ? '<div style="margin-top:12px;background:rgba(76,175,125,0.15);border:1px solid #4CAF7D;border-radius:8px;padding:8px 12px;font-size:13px;color:#4CAF7D;font-weight:700">✅ Day ' + dayNum + ' complete!</div>' : ''}
+  `;
+
+  // Today checklist
+  let checklistHtml = '';
+  TASKS.forEach(task => {
+    const done = !!todayTasks[task.id];
+    checklistHtml += `
+      <div onclick="toggleTask('${task.id}')" style="background:#1A1D27;border:1px solid ${done ? '#4CAF7D' : '#2A2D3A'};border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+        <div style="width:24px;height:24px;border-radius:50%;border:2px solid ${done ? '#4CAF7D' : '#3A3D4A'};background:${done ? '#4CAF7D' : 'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s">
+          ${done ? '<span style="color:#0F1117;font-size:13px;font-weight:800">✓</span>' : ''}
+        </div>
+        <span style="font-size:16px">${task.icon}</span>
+        <span style="font-size:13px;font-weight:600;color:${done ? '#4CAF7D' : '#F0EDE6'};text-decoration:${done ? 'line-through' : 'none'};opacity:${done ? '0.7' : '1'}">${task.label}</span>
+      </div>`;
+  });
+  document.getElementById('today-checklist').innerHTML = checklistHtml;
+
+  // 75 day grid
+  let gridHtml = '';
+  for (let i = 1; i <= 75; i++) {
+    const complete = isDayComplete(i);
+    const isToday = i === dayNum;
+    const isFuture = i > dayNum;
+    let bg, border, color;
+    if (complete) { bg = '#4CAF7D'; border = '#4CAF7D'; color = '#0F1117'; }
+    else if (isToday) { bg = 'rgba(232,168,56,0.2)'; border = '#E8A838'; color = '#E8A838'; }
+    else if (isFuture) { bg = '#1A1D27'; border = '#2A2D3A'; color = '#3A3D4A'; }
+    else { bg = 'rgba(224,85,85,0.15)'; border = '#E05555'; color = '#E05555'; }
+    gridHtml += `<div style="aspect-ratio:1;background:${bg};border:1px solid ${border};border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:${color}">${i}</div>`;
+  }
+  document.getElementById('day-grid').innerHTML = gridHtml;
+
+  // Stats
+  document.getElementById('stats-display').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div style="background:#1A1D27;border:1px solid #2A2D3A;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800;color:#E8A838">${total}</div>
+        <div style="font-size:10px;color:#8B8FA8;margin-top:2px">DAYS DONE</div>
+      </div>
+      <div style="background:#1A1D27;border:1px solid #2A2D3A;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800;color:#4CAF7D">${streak}</div>
+        <div style="font-size:10px;color:#8B8FA8;margin-top:2px">STREAK</div>
+      </div>
+      <div style="background:#1A1D27;border:1px solid #2A2D3A;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800;color:#4A90D9">${75 - dayNum}</div>
+        <div style="font-size:10px;color:#8B8FA8;margin-top:2px">DAYS LEFT</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;background:#1A1D27;border:1px solid #2A2D3A;border-radius:12px;padding:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;color:#8B8FA8">Overall completion</span>
+        <span style="font-size:12px;font-weight:700;color:#E8A838">${Math.round((total/75)*100)}%</span>
+      </div>
+      <div style="background:#2A2D3A;border-radius:99px;height:8px;overflow:hidden">
+        <div style="background:linear-gradient(90deg,#4CAF7D,#E8A838);width:${(total/75)*100}%;height:100%;border-radius:99px"></div>
+      </div>
+    </div>
+    <div style="margin-top:10px;background:#1A1D27;border:1px solid #2A2D3A;border-radius:10px;padding:12px 14px;font-size:11px;color:#5A5D70;text-align:center">
+      🟡 Today &nbsp;&nbsp; 🟢 Complete &nbsp;&nbsp; 🔴 Missed &nbsp;&nbsp; ⬛ Upcoming
+    </div>
+  `;
+}
+
+// ── NAV & MEAL FUNCTIONS ────────────────────────────────────
+function renderMeal(idx) {
+  const d = mealData[idx];
+  let html = `<div style="font-size:18px;font-weight:800;margin-bottom:16px">${d.day}</div>`;
+  d.meals.forEach(m => {
+    html += `<div class="meal-item" style="border-left:4px solid ${m.color}">
+      <div class="meal-slot" style="color:${m.color}">${m.slot.toUpperCase()}</div>
+      <div class="meal-food">${m.food}</div>
+    </div>`;
+  });
+  document.getElementById('meal-display').innerHTML = html;
+}
+renderMeal(0);
+
+function showMeal(idx, btn) {
+  document.querySelectorAll('.day-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMeal(idx);
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'tracker') renderTracker();
+}
+
+function showSchedule(id, btn) {
+  ['office','remote','weekend'].forEach(s => {
+    document.getElementById('sched-'+s).style.display = s === id ? 'block' : 'none';
+  });
+  document.querySelectorAll('#schedule .toggle-btn').forEach(b => b.classList.remove('active-gold'));
+  btn.classList.add('active-gold');
+}
+
+function showWorkout(id, btn) {
+  ['gym','home','walk'].forEach(w => {
+    document.getElementById('wo-'+w).style.display = w === id ? 'block' : 'none';
+  });
+  document.querySelectorAll('#workouts .toggle-btn').forEach(b => b.classList.remove('active-green'));
+  btn.classList.add('active-green');
+}
+</script>
+</body>
+</html>
